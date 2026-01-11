@@ -452,6 +452,11 @@ def api_chat():
         app.logger.exception("Unhandled /api/chat error")
         return jsonify({"error": f"Server error: {e}"}), 500
 
+@app.route("/chatbot")
+def chatbot():
+    # This could render a chatbot HTML page or serve the chatbot interface
+    return render_template('chatbot.html')
+
 # -----------------------
 # Context processor for templates
 # -----------------------
@@ -466,14 +471,8 @@ auto_register_routes(app)
 
 # -----------------------
 # Startup: create DB tables and print registered routes
-# -----------------------
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        print("\n=== Registered routes ===")
-        for rule in app.url_map.iter_rules():
-            print(f"{rule.endpoint:30} -> {rule.rule}")
-        print("=========================\n")
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
